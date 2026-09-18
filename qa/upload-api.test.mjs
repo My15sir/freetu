@@ -2,11 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { hasValidUploadApiKey } from "../src/lib/uploadApiAuth.mjs";
-import {
-  safeFilename,
-  uniqueImageFilename,
-  uploadToTelegramChannel,
-} from "../src/lib/tgChannelUpload.mjs";
+import { safeFilename, uniqueImageFilename } from "../src/lib/imageUploadCommon.mjs";
+import { uploadToR2 } from "../src/lib/r2Upload.mjs";
+import { uploadToTelegramChannel } from "../src/lib/tgChannelUpload.mjs";
 
 test("upload API key accepts the expected bearer token", async () => {
   const request = new Request("https://example.test/api/upload/tgchannel", {
@@ -106,4 +104,49 @@ test("machine image upload rejects non-image files before contacting Telegram", 
     IMG: {},
   }, { imageOnly: true });
   assert.equal(response.status, 415);
+});
+test("machine R2 upload stores the original image and returns a direct URL", async () => {
+  const stored = [];
+  const logged = [];
+  const env = {
+    IMGRS: {
+      async put(key, value, options) {
+        stored.push({ key, value, options });
+        return { key };
+      },
+    },
+    IMG: {
+      prepare() {
+        return {
+          bind(...values) {
+            return {
+              async run() {
+                logged.push(values);
+              },
+            };
+          },
+        };
+      },
+    },
+  };
+  const form = new FormData();
+  form.append("file", new File([new Uint8Array([0x89, 0x50, 0x4e, 0x47])], "cover.png", { type: "image/png" }));
+  const request = new Request("https://images.example/api/upload/r2", {
+    method: "POST",
+    body: form,
+  });
+  const response = await uploadToR2(request, env, {
+    imageOnly: true,
+    maxBytes: 10 * 1024 * 1024,
+    uniqueFilename: true,
+  });
+  const payload = await response.json();
+
+  assert.equal(response.status, 200);
+  assert.equal(payload.success, true);
+  assert.equal(payload.provider, "r2");
+  assert.match(payload.directUrl, /^https:\/\/images\.example\/api\/rfile\/\d{8}-[0-9a-f-]+-cover\.png$/);
+  assert.equal(stored.length, 1);
+  assert.equal(stored[0].options.httpMetadata.contentType, "image/png");
+  assert.equal(logged.length, 1);
 });

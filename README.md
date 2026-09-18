@@ -113,10 +113,10 @@
 curl -X POST \
   -H "Authorization: Bearer $UPLOAD_API_KEY" \
   -F "file=@spectrogram.png" \
-  https://your-domain.example/api/upload/tgchannel
+  https://your-domain.example/api/upload/r2
 ```
 
-接口仅接受 JPEG、PNG、WebP，单文件最大 10 MiB。成功响应同时提供：
+机器接口提供 `/api/upload/r2`（推荐）和 `/api/upload/tgchannel` 两个后端；均仅接受 JPEG、PNG、WebP，单文件最大 10 MiB。成功响应同时提供：
 
 - `url`：按唯一文件名访问的公共地址；
 - `directUrl`：直接代理 Telegram 文件的公共地址，适合程序写入第三方表单。
