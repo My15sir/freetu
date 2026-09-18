@@ -1,5 +1,4 @@
-export const runtime = "edge";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,7 +12,7 @@ export async function OPTIONS() {
 }
 
 export async function POST(request) {
-  const { env } = getRequestContext();
+  const { env } = getCloudflareContext();
 
   if (!env.IMG) {
     return new Response(JSON.stringify({ error: "数据库未绑定(IMG)" }), {

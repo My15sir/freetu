@@ -1,0 +1,5 @@
+NEXTJS_ENV=development
+UPLOAD_API_KEY=replace-me
+BASIC_USER=admin
+BASIC_PASS=replace-me
+SECRET=replace-me

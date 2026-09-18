@@ -1,5 +1,4 @@
-export const runtime = 'edge';
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -18,8 +17,8 @@ export async function OPTIONS(request) {
 
 //https://developers.cloudflare.com/r2/examples/demo-worker/
 export async function GET(request, { params }) {
-  const { name } = params
-  let { env, cf, ctx } = getRequestContext();
+  const { name } = await params
+  let { env, cf, ctx } = getCloudflareContext();
 
 	if(!env.IMGRS){
 		return Response.json({
@@ -77,7 +76,7 @@ export async function GET(request, { params }) {
     if (object === null) {
       return Response.json({
         status: 404,
-        message: ` ${error.message}`,
+        message: "Not found",
         success: false
       }
         , {

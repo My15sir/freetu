@@ -1,6 +1,5 @@
-export const runtime = "edge";
 
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { uploadToTelegramChannel } from "@/lib/tgChannelUpload.mjs";
 
 const browserHeaders = {
@@ -10,7 +9,7 @@ const browserHeaders = {
 };
 
 export async function POST(request) {
-  const { env } = getRequestContext();
+  const { env } = getCloudflareContext();
   return uploadToTelegramChannel(request, env, {
     responseHeaders: browserHeaders,
   });

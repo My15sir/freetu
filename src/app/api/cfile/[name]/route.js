@@ -1,5 +1,4 @@
-export const runtime = "edge";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 /**
  * 根据 Telegram 返回的 filePath 猜测类型
@@ -21,8 +20,9 @@ function guessContentTypeFromPath(path) {
 }
 
 export async function GET(request, { params }) {
-  const { env } = getRequestContext();
-  const fileId = params?.name ? decodeURIComponent(params.name) : "";
+  const { env } = getCloudflareContext();
+  const resolvedParams = await params;
+  const fileId = resolvedParams?.name ? decodeURIComponent(resolvedParams.name) : "";
 
   if (!fileId) return new Response("Bad Request", { status: 400 });
   if (!env.TG_BOT_TOKEN) return new Response("TG_BOT_TOKEN not set", { status: 500 });

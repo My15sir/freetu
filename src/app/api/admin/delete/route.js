@@ -1,5 +1,5 @@
 
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -8,7 +8,6 @@ const corsHeaders = {
   'Content-Type': 'application/json'
 };
 
-export const runtime = 'edge';
 
 
 
@@ -17,7 +16,7 @@ export const runtime = 'edge';
 
 export async function DELETE(request) {
   let { name } = await request.json()
-  const { env, cf, ctx } = getRequestContext();
+  const { env, cf, ctx } = getCloudflareContext();
   try {
     const setData = await env.IMG.prepare(`DELETE FROM imginfo WHERE url='${name}'`).run()
     return Response.json({

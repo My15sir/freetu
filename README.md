@@ -1,5 +1,26 @@
 # telegraph-Image
 
+## 当前部署架构（Next 16 + OpenNext）
+
+本项目使用 Next.js 16、React 19 与 OpenNext Cloudflare adapter 部署到 Cloudflare Workers。
+
+```bash
+npm ci
+npm test
+npm run lint
+npm run build
+npx opennextjs-cloudflare build
+npm run deploy
+```
+
+Cloudflare bindings：
+
+- D1：`IMG`
+- R2：`IMGRS`
+- Worker：`freetu-next16`
+
+Secrets 通过 `wrangler secret bulk` 配置，不得提交到 Git。完整部署与回滚说明见 `docs/opennext-workers.md`。
+
 > 旧版在[static](https://github.com/x-dr/telegraph-Image/tree/static)分支
 
 

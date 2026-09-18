@@ -4,33 +4,37 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "next lint",
-    "d1": "wrangler d1 execute img --local --file=./tgimglog.sql",
-    "test": "node --test qa/*.test.mjs"
+    "lint": "eslint .",
+    "d1": "wrangler d1 execute freetu --local --file=./tgimglog.sql",
+    "test": "node --test qa/*.test.mjs",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
-    "@cloudflare/next-on-pages": "^1.12.1",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
-    "@next/third-parties": "14.2.35",
-    "next": "14.2.35",
+    "@next/third-parties": "16.3.5",
+    "next": "16.3.5",
     "next-auth": "5.0.0-beta.32",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
     "react-photo-view": "^1.2.6",
     "react-toastify": "^10.0.5"
   },
   "devDependencies": {
-    "@types/react": "18.3.3",
-    "eslint": "8.57.1",
-    "eslint-config-next": "14.2.35",
+    "@opennextjs/cloudflare": "1.19.11",
+    "@types/react": "19.3.0",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.5",
     "postcss": "8.5.28",
-    "tailwindcss": "^3.4.1",
-    "wrangler": "3.114.17"
+    "tailwindcss": "3.4.19",
+    "wrangler": "4.134.0"
   }
 }

@@ -1,3 +1,5 @@
+> **说明（2026-09-18）**：本文保留旧 Cloudflare Pages 管理说明。当前推荐部署方式为 Next 16 + OpenNext Cloudflare Workers，参见 [opennext-workers.md](./opennext-workers.md)。
+
 
 
 1. 创建D1数据库 如图

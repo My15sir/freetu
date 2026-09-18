@@ -54,7 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     strategy: 'jwt',
     maxAge: 24 * 60 * 60, // 会话的过期时间，单位为秒，这里设置为24小时
   },
-  secret: process.env.SECRET || '00Fv/YUm0enwy04IgP4KoNOWLODe2iJ1tvBzr+4kEZ8=', // 替换为你的安全密钥
+  secret: process.env.SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

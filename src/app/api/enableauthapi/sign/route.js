@@ -1,6 +1,5 @@
 // 新增文件：src/app/api/enableauthapi/sign/route.js
-export const runtime = "edge";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { auth } from "@/auth";
 
 function normalizeBaseUrl(s) {
@@ -31,7 +30,7 @@ async function hmacSha256Base64Url(secret, message) {
 }
 
 export async function GET(request) {
-  const { env } = getRequestContext();
+  const { env } = getCloudflareContext();
 
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",

@@ -1,6 +1,5 @@
-export const runtime = "edge";
 
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { uploadToR2 } from "@/lib/r2Upload.mjs";
 import { hasValidUploadApiKey } from "@/lib/uploadApiAuth.mjs";
 
@@ -20,7 +19,7 @@ function authError(message, status) {
 }
 
 export async function POST(request) {
-  const { env } = getRequestContext();
+  const { env } = getCloudflareContext();
   if (!String(env.UPLOAD_API_KEY || "").trim()) {
     return authError("UPLOAD_API_KEY is not configured", 503);
   }

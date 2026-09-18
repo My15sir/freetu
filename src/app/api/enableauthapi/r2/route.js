@@ -1,6 +1,5 @@
-export const runtime = "edge";
 
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { uploadToR2 } from "@/lib/r2Upload.mjs";
 
 const browserHeaders = {
@@ -10,7 +9,7 @@ const browserHeaders = {
 };
 
 export async function POST(request) {
-  const { env } = getRequestContext();
+  const { env } = getCloudflareContext();
   return uploadToR2(request, env, {
     responseHeaders: browserHeaders,
   });

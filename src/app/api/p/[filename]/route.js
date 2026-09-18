@@ -1,5 +1,4 @@
-export const runtime = "edge";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 function normalizeProvider(p) {
   return String(p || "").trim().toLowerCase();
@@ -14,8 +13,9 @@ function stripPrefix(url, prefix) {
 }
 
 export async function GET(request, { params }) {
-  const { env } = getRequestContext();
-  const filename = params?.filename ? decodeURIComponent(params.filename) : "";
+  const { env } = getCloudflareContext();
+  const resolvedParams = await params;
+  const filename = resolvedParams?.filename ? decodeURIComponent(resolvedParams.filename) : "";
 
   if (!filename) return new Response("Bad Request", { status: 400 });
   if (!env.IMG) return new Response("DB not bound", { status: 500 });

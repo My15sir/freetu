@@ -1,8 +1,7 @@
-export const runtime = "edge";
-import { getRequestContext } from "@cloudflare/next-on-pages";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
 
 export async function GET(request) {
-  const { env } = getRequestContext();
+  const { env } = getCloudflareContext();
 
   const corsHeaders = {
     "Access-Control-Allow-Origin": "*",

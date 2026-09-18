@@ -1,5 +1,5 @@
 
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { getCloudflareContext } from '@opennextjs/cloudflare';
 
 // ...
 
@@ -10,10 +10,9 @@ const corsHeaders = {
   'Content-Type': 'application/json'
 };
 
-export const runtime = 'edge';
 export async function POST(request) {
   // 获取客户端的IP地址
-  const { env, cf, ctx } = getRequestContext();
+  const { env, cf, ctx } = getCloudflareContext();
   // console.log(dd);
   try {
     let { page, query } = await request.json()
@@ -59,6 +58,3 @@ export async function POST(request) {
   }
 
 }
-
-
-

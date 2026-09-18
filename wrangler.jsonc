@@ -1,0 +1,31 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "freetu-next16",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-09-18",
+  "compatibility_flags": [
+    "nodejs_compat",
+    "global_fetch_strictly_public"
+  ],
+  "workers_dev": true,
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "d1_databases": [
+    {
+      "binding": "IMG",
+      "database_name": "freetu",
+      "database_id": "cca61ae3-18e1-4d8d-a475-1ecd930170ab"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "IMGRS",
+      "bucket_name": "freetu"
+    }
+  ]
+}
