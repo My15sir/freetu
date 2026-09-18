@@ -164,17 +164,29 @@ export async function uploadToTelegramChannel(request, env, options = {}) {
       headers: { "User-Agent": "Mozilla/5.0" },
       body: telegramForm,
     });
-    const telegramJson = await telegramResponse.json().catch(() => null);
+    const telegramText = await telegramResponse.text();
+    let telegramJson = null;
+    try {
+      telegramJson = JSON.parse(telegramText);
+    } catch (_) {
+      telegramJson = null;
+    }
     const storedFile = telegramFile(telegramJson);
 
     if (!telegramResponse.ok || !storedFile?.fileId) {
+      const upstreamStatus = telegramResponse.status || 0;
+      const upstreamMessage = telegramJson?.description || `Telegram API HTTP ${upstreamStatus}`;
+      console.error(
+        `[tgchannel] Telegram upload rejected: status=${upstreamStatus} body=${telegramText.slice(0, 300)}`
+      );
       return jsonResponse(
         {
-          status: 502,
-          message: telegramJson?.description || "Telegram upload failed",
+          status: 424,
+          message: upstreamMessage,
+          upstreamStatus,
           success: false,
         },
-        502,
+        424,
         responseHeaders
       );
     }
@@ -209,8 +221,8 @@ export async function uploadToTelegramChannel(request, env, options = {}) {
     );
   } catch (error) {
     return jsonResponse(
-      { status: 502, message: error?.message || String(error), success: false },
-      502,
+      { status: 503, message: error?.message || String(error), success: false },
+      503,
       responseHeaders
     );
   }
