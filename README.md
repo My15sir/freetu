@@ -79,6 +79,7 @@
 |CUSTOM_DOMAIN | https://your-custom-domain.com (自定义加速域名) | string |
 |TG_BOT_TOKEN  | 123468:AAxxxGKrn5 (从 [@BotFather](https://t.me/BotFather)) |string |
 |TG_CHAT_ID   | -1234567 (频道的ID,TG Bot要是该频道或群组的管理员) |string |
+|UPLOAD_API_KEY| Hermes 等机器客户端使用的独立上传密钥，仅授予上传权限 | string |
 
 > TG_BOT_TOKEN
 
@@ -103,3 +104,21 @@
 
 [![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
 
+
+## 机器上传 API
+
+部署环境配置 `UPLOAD_API_KEY` 后，受信任的服务可以通过独立接口上传图片，无需保存管理员账号、密码或 NextAuth Cookie。
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $UPLOAD_API_KEY" \
+  -F "file=@spectrogram.png" \
+  https://your-domain.example/api/upload/tgchannel
+```
+
+接口仅接受 JPEG、PNG、WebP，单文件最大 10 MiB。成功响应同时提供：
+
+- `url`：按唯一文件名访问的公共地址；
+- `directUrl`：直接代理 Telegram 文件的公共地址，适合程序写入第三方表单。
+
+`UPLOAD_API_KEY` 必须只配置在 Cloudflare 环境变量或密钥存储中，不得提交到 Git。

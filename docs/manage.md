@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS imginfo (
 |CUSTOM_DOMAIN | https://your-custom-domain.com (自定义加速域名) | string |
 |TG_BOT_TOKEN  | 123468:AAxxxGKrn5 (从 [@BotFather](https://t.me/BotFather)) |string |
 |TG_CHAT_ID   | -1234567 (频道的ID,TG Bot要是该频道或群组的管理员) |string |
+|UPLOAD_API_KEY| Hermes 等机器客户端使用的独立上传密钥，仅授予上传权限 | string |
 
 > TG_BOT_TOKEN
 
