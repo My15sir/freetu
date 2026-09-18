@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 
 import { hasValidUploadApiKey } from "../src/lib/uploadApiAuth.mjs";
-import { safeFilename, uniqueImageFilename } from "../src/lib/imageUploadCommon.mjs";
+import { publicOrigin, safeFilename, uniqueImageFilename } from "../src/lib/imageUploadCommon.mjs";
 import { uploadToR2 } from "../src/lib/r2Upload.mjs";
 import { uploadToTelegramChannel } from "../src/lib/tgChannelUpload.mjs";
 
@@ -149,4 +149,11 @@ test("machine R2 upload stores the original image and returns a direct URL", asy
   assert.equal(stored.length, 1);
   assert.equal(stored[0].options.httpMetadata.contentType, "image/png");
   assert.equal(logged.length, 1);
+});
+
+
+test("public origin honors the configured production base URL", () => {
+  const request = new Request("https://worker.example/api/upload/r2");
+  assert.equal(publicOrigin(request, { PUBLIC_BASE_URL: "https://imgaes.dpdns.org/" }), "https://imgaes.dpdns.org");
+  assert.equal(publicOrigin(request, {}), "https://worker.example");
 });

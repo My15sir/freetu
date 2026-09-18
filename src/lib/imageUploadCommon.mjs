@@ -38,6 +38,19 @@ export function uniqueImageFilename(name, contentType, currentTime = new Date())
   return `${date}-${crypto.randomUUID()}-${stem}${extension}`;
 }
 
+
+export function publicOrigin(request, env) {
+  const configured = String(env?.PUBLIC_BASE_URL || "").trim().replace(/\/+$/, "");
+  if (configured) {
+    const url = new URL(configured);
+    if (url.protocol !== "https:") {
+      throw new Error("PUBLIC_BASE_URL must use HTTPS");
+    }
+    return url.origin;
+  }
+  return new URL(request.url).origin;
+}
+
 export async function insertManageLogSafe(db, { id, url, provider, filename, createdAt }) {
   try {
     await db

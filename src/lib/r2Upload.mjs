@@ -2,6 +2,7 @@ import {
   IMAGE_MIME_TYPES,
   insertManageLogSafe,
   jsonResponse,
+  publicOrigin,
   safeFilename,
   uniqueImageFilename,
 } from "./imageUploadCommon.mjs";
@@ -82,9 +83,9 @@ export async function uploadToR2(request, env, options = {}) {
       );
     }
 
-    const requestUrl = new URL(request.url);
-    const publicUrl = `${requestUrl.origin}/api/p/${encodeURIComponent(filename)}`;
-    const directUrl = `${requestUrl.origin}/api/rfile/${encodeURIComponent(filename)}`;
+    const origin = publicOrigin(request, env);
+    const publicUrl = `${origin}/api/p/${encodeURIComponent(filename)}`;
+    const directUrl = `${origin}/api/rfile/${encodeURIComponent(filename)}`;
     const createdAt = Date.now();
     const id = crypto.randomUUID();
 

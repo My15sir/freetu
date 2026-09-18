@@ -2,6 +2,7 @@ import {
   IMAGE_MIME_TYPES,
   insertManageLogSafe,
   jsonResponse,
+  publicOrigin,
   safeFilename,
   uniqueImageFilename,
 } from "./imageUploadCommon.mjs";
@@ -145,9 +146,9 @@ export async function uploadToTelegramChannel(request, env, options = {}) {
       );
     }
 
-    const requestUrl = new URL(request.url);
-    const publicUrl = `${requestUrl.origin}/api/p/${encodeURIComponent(filename)}`;
-    const directUrl = `${requestUrl.origin}/api/cfile/${encodeURIComponent(storedFile.fileId)}`;
+    const origin = publicOrigin(request, env);
+    const publicUrl = `${origin}/api/p/${encodeURIComponent(filename)}`;
+    const directUrl = `${origin}/api/cfile/${encodeURIComponent(storedFile.fileId)}`;
     const createdAt = nowMs();
     const id = crypto.randomUUID();
 
